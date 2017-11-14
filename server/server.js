@@ -22,9 +22,21 @@ io.on('connection', (socket) => {
     createAt: 123
   });
 
+  socket.emit('newMessage', {
+    from: 'John',
+    text: 'See you then',
+    createdAt: 123123
+  });
+
   // event listener
-  socket.on('createEmail', (newEmail) => {
-    console.log('createEmail', newEmail);
+  socket.on('createMessage', (newMessage) => {
+    console.log('createMessage', newMessage);
+
+    // socket.emit('newMessage', {
+    //   from: newMessage.from,
+    //   text: newMessage.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
