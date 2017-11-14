@@ -9,14 +9,11 @@ socket.on('connect', function () {
   console.log('Connected to server');
 
   // we don't want to emit the event until we are connected socket.
-
-  socket.emit('createMessage', {
-    from: 'Kevin',
-    text: 'Hello.'
-  });
+  // socket.emit('createMessage', {
+  //   from: 'Kevin',
+  //   text: 'Hello.'
+  // });
 });
-
-
 
 socket.on('disconnect', function () {
   console.log('Disconnected from server');

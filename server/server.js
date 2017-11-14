@@ -16,27 +16,23 @@ io.on('connection', (socket) => {
   console.log('New user connected');
 
   // emit event to client (name, data)
-  socket.emit('newEmail', {
-    from: 'ch@example.com',
-    text: 'Hey. What is going on.',
-    createAt: 123
-  });
-
-  socket.emit('newMessage', {
-    from: 'John',
-    text: 'See you then',
-    createdAt: 123123
-  });
+  // socket.emit() emits an event to a single connection
+  // socket.emit('newMessage', {
+  //   from: 'John',
+  //   text: 'See you then',
+  //   createdAt: 123123
+  // });
 
   // event listener
-  socket.on('createMessage', (newMessage) => {
-    console.log('createMessage', newMessage);
+  socket.on('createMessage', (message) => {
+    console.log('createMessage', message);
 
-    // socket.emit('newMessage', {
-    //   from: newMessage.from,
-    //   text: newMessage.text,
-    //   createdAt: new Date().getTime()
-    // });
+    // io.emit() emots an event to every single connection
+    io.emit('newMessage', {
+      from: message.from,
+      text: message.text,
+      createdAt: new Date().getTime()
+    });
   });
 
   socket.on('disconnect', () => {
