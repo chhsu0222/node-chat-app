@@ -13,21 +13,7 @@
   <!-- By adding the script tage we're now loading in the library
   and on the browser we have access to all sorts of methods available
   because of the socket library. -->
-  <script>
-  /*
-  initiating the request from client to the server to open up a websocket
-  and keep that connection open.
-  */
-    var socket = io();
-    socket.on('connect', () => {
-      console.log('Connected to server');
-    });
-
-    socket.on('disconnect', () => {
-      console.log('Disconnected from server');
-    });
-
-  </script>
+  <script src="/js/index.js"></script>
 </body>
 
 </html>

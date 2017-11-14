@@ -11,9 +11,21 @@ var io = socketIO(server);
 
 app.use(express.static(publicPath));
 
-// register an event listen with io.on
+// register an event listener with io.on
 io.on('connection', (socket) => {
   console.log('New user connected');
+
+  // emit event to client (name, data)
+  socket.emit('newEmail', {
+    from: 'ch@example.com',
+    text: 'Hey. What is going on.',
+    createAt: 123
+  });
+
+  // event listener
+  socket.on('createEmail', (newEmail) => {
+    console.log('createEmail', newEmail);
+  });
 
   socket.on('disconnect', () => {
     console.log('User was disconnected');
