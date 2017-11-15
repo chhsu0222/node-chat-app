@@ -3,6 +3,7 @@ const http = require('http'); // doesn't need to install since it's a built-in m
 const express = require('express');
 const socketIO = require('socket.io');
 
+const {generateMessage} = require('./utils/message');
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT || 3000;
 var app = express();
@@ -17,34 +18,17 @@ io.on('connection', (socket) => {
 
   // emit event to client (name, data)
   // socket.emit() emits an event to a single connection
-  // socket.emit('newMessage', {
-  //   from: 'John',
-  //   text: 'See you then',
-  //   createdAt: 123123
-  // });
 
-  socket.emit('newMessage', {
-    from: 'Admin',
-    text: 'Welcome to the chat app',
-    createdAt: new Date().getTime()
-  });
+  socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app'));
 
-  socket.broadcast.emit('newMessage', {
-    from: 'Admin',
-    text: 'New user jioned',
-    createdAt: new Date().getTime()
-  });
+  socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user jioned'));
 
   // event listener
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
 
     // io.emit() emits an event to every single connection
-    io.emit('newMessage', {
-      from: message.from,
-      text: message.text,
-      createdAt: new Date().getTime()
-    });
+    io.emit('newMessage', generateMessage(message.from, message.text));
 
     // broadcasting emits an event to everybody but one specific user
     // newMessage event will fire to everybody but myself
