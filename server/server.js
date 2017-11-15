@@ -23,16 +23,36 @@ io.on('connection', (socket) => {
   //   createdAt: 123123
   // });
 
+  socket.emit('newMessage', {
+    from: 'Admin',
+    text: 'Welcome to the chat app',
+    createdAt: new Date().getTime()
+  });
+
+  socket.broadcast.emit('newMessage', {
+    from: 'Admin',
+    text: 'New user jioned',
+    createdAt: new Date().getTime()
+  });
+
   // event listener
   socket.on('createMessage', (message) => {
     console.log('createMessage', message);
 
-    // io.emit() emots an event to every single connection
+    // io.emit() emits an event to every single connection
     io.emit('newMessage', {
       from: message.from,
       text: message.text,
       createdAt: new Date().getTime()
     });
+
+    // broadcasting emits an event to everybody but one specific user
+    // newMessage event will fire to everybody but myself
+    // socket.broadcast.emit('newMessage', {
+    //   from: message.from,
+    //   text:message.text,
+    //   createdAt: new Date().getTime()
+    // });
   });
 
   socket.on('disconnect', () => {
