@@ -24,12 +24,13 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user jioned'));
 
   // event listener
-  socket.on('createMessage', (message) => {
+  // add callback to acknowledge that we got that request
+  socket.on('createMessage', (message, callback) => {
     console.log('createMessage', message);
 
     // io.emit() emits an event to every single connection
     io.emit('newMessage', generateMessage(message.from, message.text));
-
+    callback('This is from the server.');
     // broadcasting emits an event to everybody but one specific user
     // newMessage event will fire to everybody but myself
     // socket.broadcast.emit('newMessage', {

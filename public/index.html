@@ -9,10 +9,18 @@
 <body>
   <p><b>Welcome to the chat app</b></p>
 
+  <ol id="messages"></ol>
+
+  <form id="message-form">
+    <input name="message" type="text" placeholder="Message"/>
+    <button>Send</button>
+  </form>
+
   <script src="/socket.io/socket.io.js"></script>
   <!-- By adding the script tage we're now loading in the library
   and on the browser we have access to all sorts of methods available
   because of the socket library. -->
+  <script src="/js/libs/jquery-3.2.1.min.js"></script>
   <script src="/js/index.js"></script>
 </body>
 
