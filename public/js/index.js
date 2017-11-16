@@ -25,7 +25,7 @@ socket.on('newMessage', function (message) {
   var li = jQuery('<li></li>');
   li.text(`${message.from}: ${message.text}`);
 
-  jQuery('#messages').append(li);
+  jQuery('#messages').append(li); // add it as its last child
 });
 
 // add acknowledgement to the client
@@ -37,12 +37,33 @@ socket.on('newMessage', function (message) {
 // });
 
 jQuery('#message-form').on('submit', function (e) {
-  e.preventDefault();
+  /*
+  Default action will go through a full refresh then it's going to
+  add to the data as a query on the string URL.
+  e.g. localhost:3000/?message=Test
+  */
+  e.preventDefault(); // e is short of event
 
   socket.emit('createMessage', {
     from: 'User',
     text: jQuery('[name=message]').val()
   }, function () {
 
+  });
+});
+
+var locationButton = jQuery('#send-location');
+locationButton.on('click', function () {
+  if (!navigator.geolocation) {
+    return alert('Geolocation not supported by your browser.');
+  }
+
+  navigator.geolocation.getCurrentPosition(function (position) {
+    socket.emit('createLocationMessage', {
+      latitude: position.coords.latitude,
+      longitude: position.coords.longitude
+    });
+  }, function () {
+    alert('Unable to fetch location');
   });
 });

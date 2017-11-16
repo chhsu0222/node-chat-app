@@ -33,11 +33,10 @@ io.on('connection', (socket) => {
     callback('This is from the server.');
     // broadcasting emits an event to everybody but one specific user
     // newMessage event will fire to everybody but myself
-    // socket.broadcast.emit('newMessage', {
-    //   from: message.from,
-    //   text:message.text,
-    //   createdAt: new Date().getTime()
-    // });
+  });
+
+  socket.on('createLocationMessage', (coords) => {
+    io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`));
   });
 
   socket.on('disconnect', () => {
