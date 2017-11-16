@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
 
     // io.emit() emits an event to every single connection
     io.emit('newMessage', generateMessage(message.from, message.text));
-    callback('This is from the server.');
+    callback();
     // broadcasting emits an event to everybody but one specific user
     // newMessage event will fire to everybody but myself
   });
