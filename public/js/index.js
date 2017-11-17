@@ -4,6 +4,24 @@ and keep that connection open.
 */
 var socket = io();
 
+function scrollToBottom () {
+  // Selectors
+  var messages = jQuery('#messages');
+  var newMessage = messages.children('li:last-child');
+  // Heights
+  var clientHeight = messages.prop('clientHeight'); // prop gives us a cross-browser way to fech a property
+  var scrollTop = messages.prop('scrollTop');
+  var scrollHeight = messages.prop('scrollHeight');
+  var newMessageHeight = newMessage.innerHeight();
+  // the height of the 2nd to last message
+  var lastMessageHeight = newMessage.prev().innerHeight(); // move to the previous child
+
+  if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+    // console.log('should scroll !!!');
+    messages.scrollTop(scrollHeight);
+  }
+}
+
 // connect and disconnect are built-in modules (event listener)
 socket.on('connect', function () {
   console.log('Connected to server');
@@ -31,6 +49,7 @@ socket.on('newMessage', function (message) {
   });
 
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 socket.on('newLocationMessage', function (message) {
@@ -41,7 +60,9 @@ socket.on('newLocationMessage', function (message) {
     url: message.url,
     createdAt: formattedTime
   })
+
   jQuery('#messages').append(html);
+  scrollToBottom();
 });
 
 // add acknowledgement to the client
