@@ -18,7 +18,7 @@ function scrollToBottom () {
 
   if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
     // console.log('should scroll !!!');
-    messages.scrollTop(scrollHeight);
+    messages.scrollTop(scrollHeight); // set vertical scrollbar position
   }
 }
 
@@ -41,7 +41,7 @@ socket.on('disconnect', function () {
 socket.on('newMessage', function (message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
   var template = jQuery('#message-template').html(); // .html() to get its inner HTML back
-  // Mustache.render(template, data_you_want_to_render into_the_template)
+  // Mustache.render(template, data_you_want_to_render_into_the_template)
   var html = Mustache.render(template, {
     text: message.text,
     from: message.from,
