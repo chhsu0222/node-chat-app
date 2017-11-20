@@ -26,11 +26,24 @@ function scrollToBottom () {
 socket.on('connect', function () {
   console.log('Connected to server');
 
-  // we don't want to emit the event until we are connected socket.
-  // socket.emit('createMessage', {
-  //   from: 'Kevin',
-  //   text: 'Hello.'
-  // });
+  /*
+  location is a global object which is provided by your browser.
+  search is the query string.
+  jQuery.param creates a serialized representation of an array or an object.
+  The serialized values can be used in the URL query string
+  when making an AJAX request.
+  */
+  var params = jQuery.deparam(window.location.search);
+
+  socket.emit('join', params, function (err) {
+    if (err) {
+      alert(err);
+      // send the user back to the root page
+      window.location.href = '/';
+    } else {
+      console.log('no error');
+    }
+  });
 });
 
 socket.on('disconnect', function () {
@@ -105,7 +118,7 @@ locationButton.on('click', function () {
       longitude: position.coords.longitude
     });
   }, function () {
-    locationButton.removeAttr('disabled');
-    alert('Unable to fetch location').text('Sending location');
+    locationButton.removeAttr('disabled').text('Sending location');
+    alert('Unable to fetch location');
   });
 });
