@@ -51,6 +51,20 @@ socket.on('disconnect', function () {
 });
 
 // the argument is the data sent from Server
+
+socket.on('updateUserList', function (users) {
+  console.log('Users list', users);
+  // update the 'People' column
+  var ol = jQuery('<ol></ol>');
+
+  users.forEach(function (user) {
+    ol.append(jQuery('<li></li>').text(user));
+  });
+
+  jQuery('#users').html(ol);
+
+});
+
 socket.on('newMessage', function (message) {
   var formattedTime = moment(message.createdAt).format('h:mm a');
   var template = jQuery('#message-template').html(); // .html() to get its inner HTML back

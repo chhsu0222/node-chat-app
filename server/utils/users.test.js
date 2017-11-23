@@ -37,14 +37,14 @@ describe('Users', () => {
 
   it('should remove a user', () => {
     var userId = '3';
-    var user = users.removeUSer(userId);
+    var user = users.removeUser(userId);
     expect(users.users.length).toBe(2);
     expect(user.id).toBe(userId);
   });
 
   it('should not remove user', () => {
     var userId = '5';
-    var user = users.removeUSer(userId);
+    var user = users.removeUser(userId);
     expect(users.users.length).toBe(3);
     expect(user).toBeFalsy();
   });

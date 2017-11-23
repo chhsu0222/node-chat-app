@@ -18,7 +18,7 @@ class Users {
     this.users.push(user);
     return user;
   }
-  removeUSer (id) {
+  removeUser (id) {
     // return user that was removed
     var user = this.getUser(id);
     if (user) {

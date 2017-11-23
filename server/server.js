@@ -5,11 +5,14 @@ const socketIO = require('socket.io');
 
 const {generateMessage, generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
+const {Users} = require('./utils/users');
+
 const publicPath = path.join(__dirname, '..', 'public');
 const port = process.env.PORT || 3000;
 var app = express();
 var server = http.createServer(app);
 var io = socketIO(server);
+var users = new Users();
 
 app.use(express.static(publicPath));
 
@@ -24,10 +27,15 @@ io.on('connection', (socket) => {
   // add callback to acknowledge that we got that request
   socket.on('join', (params, callback) => {
     if (!isRealString(params.name) || !isRealString(params.room)) {
-      callback('Name and room name are required'); // the argument for 'err'
+      return callback('Name and room name are required'); // the argument for 'err'
     }
 
     socket.join(params.room); // Adding the user to the room
+    users.removeUser(socket.id); // remove them from any potential previous rooms
+    users.addUser(socket.id, params.name, params.room); // add them to the new one
+
+    io.to(params.room).emit('updateUserList', users.getUserList(params.room));
+
     // socket.leave('The noame of chat room') -> to leave the room
 
     // The ways to emit to specific rooms (e.g. 'The Office')
@@ -58,6 +66,12 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     console.log('User was disconnected');
+    var user = users.removeUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+      io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left`));
+    }
   });
 });
 
